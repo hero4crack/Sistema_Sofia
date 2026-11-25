@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f3f7f8" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="SomaMap" />
+  <title>SomaMap · Bio-Escáner Somatosensorial & PNL</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="./icons/icon.svg" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="ambient-bg" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+  </div>
+
+  <div class="app-shell">
+    <header class="top-bar">
+      <div class="brand">
+        <div class="brand-logo">
+          <img src="./icons/icon.svg" alt="SomaMap" class="brand-icon" />
+        </div>
+        <div>
+          <h1>SomaMap <span class="ver-tag">3D</span></h1>
+          <p class="brand-sub" id="headerGreeting">Sistema Personal de Regulación</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button id="installBtn" class="btn-install hidden" type="button">Instalar</button>
+        <button id="btnOpenProfile" class="btn-avatar" type="button" title="Mi Perfil">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main id="appMain" class="app-main">
+      <!-- Vista: Inicio -->
+      <section id="view-home" class="view active">
+        <div class="hero-card">
+          <div class="hero-glow"></div>
+          <span class="pill-glow">BIO-ESCÁNER PERSONAL · PNL & EJE HHA</span>
+          <h2 id="heroTitle">Regula tu cuerpo, calma tu mente</h2>
+          <p>
+            Mapea en 3D dónde somatizas el estrés y aplica el protocolo de reescritura neurolingüística para activar tu corteza prefrontal.
+          </p>
+          <button type="button" class="btn-primary btn-full" data-nav="session">
+            Iniciar Escaneo Somático
+          </button>
+        </div>
+
+        <div id="profilePromptCard" class="glass-card hidden"></div>
+
+        <div class="stats-grid" id="homeQuickStats"></div>
+
+        <div class="glass-card">
+          <h3>Protocolo en 3 fases</h3>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-num">01</div>
+              <div>
+                <strong>Mapeo Somatosensorial 3D</strong>
+                <p class="muted small-note">Ubica en el avatar dónde se refleja tu alerta física y mide su intensidad.</p>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-num">02</div>
+              <div>
+                <strong>Kit Somatolingüístico (PNL)</strong>
+                <p class="muted small-note">Respiración 4-4-6 + escritura estructurada para modular la amígdala.</p>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-num">03</div>
+              <div>
+                <strong>Chequeo Comparativo</strong>
+                <p class="muted small-note">Registra tu nivel final y guarda tu evolución personal.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Vista: Nueva Sesión (Wizard) -->
+      <section id="view-session" class="view">
+        <div class="wizard-progress">
+          <div class="wizard-meta">
+            <span class="wizard-step-label" id="wizardStepLabel">Paso 1 de 4</span>
+            <span class="wizard-step-pct" id="wizardStepPct">25%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="wizardProgressFill" style="width: 25%"></div>
+          </div>
+        </div>
+        <div id="wizardContainer"></div>
+      </section>
+
+      <!-- Vista: Mi Progreso -->
+      <section id="view-dashboard" class="view">
+        <div class="section-header-row">
+          <div>
+            <h2>Mi Progreso Personal</h2>
+            <p class="muted small-note">Evolución guardada en este dispositivo</p>
+          </div>
+          <button type="button" id="btnReportPdf" class="btn-primary btn-sm">Reporte PDF</button>
+        </div>
+
+        <div class="stats-grid" id="dashStats"></div>
+
+        <div class="glass-card">
+          <h3>Efectividad del Protocolo (Antes vs. Después)</h3>
+          <div id="chartBeforeAfter"></div>
+        </div>
+
+        <div class="glass-card">
+          <h3>Mapa de Somatizaciones Frecuentes</h3>
+          <div id="chartZones"></div>
+        </div>
+
+        <div class="glass-card">
+          <h3>Tus Sesiones Recientes</h3>
+          <div id="sessionsList"></div>
+        </div>
+
+        <div style="text-align:center; margin-top: 8px;">
+          <button type="button" id="btnClearData" class="btn-outline-danger btn-sm">Borrar todo mi historial</button>
+        </div>
+      </section>
+
+      <!-- Vista: Guía -->
+      <section id="view-guide" class="view">
+        <div class="glass-card">
+          <span class="pill-teal">BASE NEUROCIENTÍFICA</span>
+          <h2 style="margin-top:8px;">¿Cómo funciona SomaMap?</h2>
+          <p class="muted">
+            Cuando percibes presión o recuerdas una situación difícil, la <strong>amígdala</strong> activa el eje del estrés (HHA) y envía señales al cuerpo: dolor de cabeza, opresión en el pecho, nudo estomacal, sudoración, alergias o sensación térmica alterada.
+          </p>
+          <p class="muted" style="margin-top:10px;">
+            Al identificar la zona en el modelo 3D y aplicar <strong>escritura estructurada + PNL</strong>, activas la <strong>corteza prefrontal</strong> para reencuadrar la alerta y reducir la somatización.
+          </p>
+        </div>
+
+        <div class="glass-card">
+          <h3>Instalar como App en tu teléfono</h3>
+          <ul class="steps-list">
+            <li><strong>Android (Chrome):</strong> Toca <em>"Instalar"</em> arriba o en el menú (⋮) → <em>"Instalar aplicación"</em>.</li>
+            <li><strong>iPhone (Safari):</strong> Toca <em>Compartir</em> → <em>"Agregar a pantalla de inicio"</em>.</li>
+          </ul>
+        </div>
+
+        <div class="glass-card">
+          <h3>Mi Perfil Local</h3>
+          <p class="muted small-note">Estos datos solo se guardan en este dispositivo para personalizar tus sesiones y tu reporte CSV.</p>
+          <div id="profileFormHost" style="margin-top:12px;"></div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Navegación principal">
+      <button type="button" class="nav-btn active" data-nav="home">
+        <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span>Inicio</span>
+      </button>
+      <button type="button" class="nav-btn" data-nav="session">
+        <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 8v8M8 12h8"/>
+        </svg>
+        <span>Escáner 3D</span>
+      </button>
+      <button type="button" class="nav-btn" data-nav="dashboard">
+        <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="20" x2="18" y2="10"/>
+          <line x1="12" y1="20" x2="12" y2="4"/>
+          <line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+        <span>Progreso</span>
+      </button>
+      <button type="button" class="nav-btn" data-nav="guide">
+        <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+        <span>Guía & Perfil</span>
+      </button>
+    </nav>
+  </div>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
